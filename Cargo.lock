@@ -599,9 +599,9 @@ dependencies = [
 
 [[package]]
 name = "stowr-core"
-version = "0.2.2"
+version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3da06e0f8f822657f8cf3442f90eabff6314a7ac9dbd55aefac3be5c41cefb5a"
+checksum = "6717caa992022c6061e9de5c71e8a86f57231e89e6e12e75f89ee4089390ea45"
 dependencies = [
  "anyhow",
  "chrono",
