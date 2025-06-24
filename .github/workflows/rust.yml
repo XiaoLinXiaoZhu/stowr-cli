@@ -1,0 +1,156 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v**'
+  pull_request:
+    branches: [ "main", "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Cache cargo dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+    - name: Run tests
+      run: cargo test --verbose
+
+  build:
+    name: Build
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact_name: stowr
+            asset_name: stowr-linux-x86_64
+            archive_ext: tar.gz
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact_name: stowr.exe
+            asset_name: stowr-windows-x86_64
+            archive_ext: zip
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            artifact_name: stowr
+            asset_name: stowr-macos-x86_64
+            archive_ext: tar.gz
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            artifact_name: stowr
+            asset_name: stowr-macos-aarch64
+            archive_ext: tar.gz
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Cache cargo dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: ${{ matrix.target }}
+    
+    - name: Build release binary
+      run: cargo build --release --target ${{ matrix.target }} --verbose
+    - name: Strip binary (Linux and macOS)
+      if: matrix.os != 'windows-latest'
+      run: strip target/${{ matrix.target }}/release/${{ matrix.artifact_name }}
+    
+    - name: Create release archive
+      shell: bash
+      run: |
+        binary_path="target/${{ matrix.target }}/release/${{ matrix.artifact_name }}"
+        archive_name="${{ matrix.asset_name }}.${{ matrix.archive_ext }}"
+        
+        if [[ "${{ matrix.archive_ext }}" == "zip" ]]; then
+          7z a "$archive_name" "$binary_path"
+        else
+          tar -czf "$archive_name" -C "target/${{ matrix.target }}/release" "${{ matrix.artifact_name }}"
+        fi
+          echo "Archive created: $archive_name"
+        ls -la "$archive_name"
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.asset_name }}
+        path: ${{ matrix.asset_name }}.${{ matrix.archive_ext }}
+        retention-days: 30
+
+  release:
+    name: Create Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+    
+    - name: Display downloaded artifacts
+      run: ls -la artifacts/
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: artifacts/*/*
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+        body: |
+          ## STOWR ${{ github.ref_name }}
+          
+          预编译二进制文件下载：
+          
+          - **Linux (x86_64)**: `stowr-linux-x86_64.tar.gz`
+          - **Windows (x86_64)**: `stowr-windows-x86_64.zip`
+          - **macOS (Intel)**: `stowr-macos-x86_64.tar.gz`
+          - **macOS (Apple Silicon)**: `stowr-macos-aarch64.tar.gz`
+          
+          ### 安装说明
+          
+          1. 下载对应平台的压缩包
+          2. 解压并将 `stowr` 或 `stowr.exe` 放到 PATH 目录中
+          3. 运行 `stowr --help` 查看使用帮助
+          
+          ### 主要功能
+          
+          - 📦 文件压缩存储和解压还原
+          - 🔍 通配符批量匹配和排除模式
+          - 📊 索引管理 (JSON/SQLite 自动切换)
+          - ⚙️ 配置管理和自定义存储路径
+          - 🔄 批量操作、重命名、移动、删除
+          - 📋 文件列表和版本信息
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

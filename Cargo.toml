@@ -1,0 +1,35 @@
+[package]
+name = "stowr-cli"
+version = "0.2.2"
+edition = "2021"
+license = "GPL-3.0-or-later"
+homepage = "https://github.com/XiaoLinXiaoZhu/stowr-cli"
+repository = "https://github.com/XiaoLinXiaoZhu/stowr-cli"
+authors = ["XiaoLinXiaoZhu"]
+keywords = ["cli", "file", "management", "tool", "command-line"]
+categories = ["command-line-utilities", "filesystem"]
+readme = "readme.md"
+
+description = "A simple CLI tool for file management, including compressing, extracting, renaming, and organizing files."
+
+[dependencies]
+clap = { version = "4.4", features = ["derive"] }
+stowr-core = "0.2.2"
+anyhow = "1.0"
+
+[dev-dependencies]
+tempfile = "3.8"
+
+[package.metadata.release]
+# 发布前确认
+release = true
+# 发布到 crates.io
+publish = true
+# 自动推送
+push = true
+# 发布后创建 git 标签
+tag = true
+# 标签名格式 (会是 v0.2.2)
+tag-name = "v{{version}}"
+# 标签消息
+tag-message = "Release stowr-cli version {{version}}"
