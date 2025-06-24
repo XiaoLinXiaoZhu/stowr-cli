@@ -1,7 +1,10 @@
-## STOWR
+## Stowr Cli
+
+[![Crates.io](https://img.shields.io/crates/v/stowr-core.svg)](https://crates.io/crates/stowr-cli)
+[![Documentation](https://docs.rs/stowr-core/badge.svg)](https://docs.rs/stowr-cli)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ### 为什么叫做STOWR？
-
 STOWR是一个由“Store”和“Owe”,两个单词组合而成的名称。它能够实现动态的 压缩/解压 文件功能，实现小文件的优化存储。
 
 当文件被存储时，它对于 STOWR 来说处于“Store”状态；而对于文件读写来说，它处于“Owe”状态。当文件被解压后，它将被从STOWR中删除，STOWR将不再拥有该文件。
@@ -10,6 +13,7 @@ STOWR是一个由“Store”和“Owe”,两个单词组合而成的名称。它
 
 想要查看文件内容，你需要首先使用 STOWR 将其提取出来，提取之后，stowr 将不再 “store” 该文件,“owe"关系也会被解除。
 
+想想看：`stowr owe me_a_file.txt` stowr 你欠我一个文件！
 
 ### STOWR的功能
 
