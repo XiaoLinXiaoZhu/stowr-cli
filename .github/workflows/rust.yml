@@ -40,23 +40,23 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            artifact_name: stowr
-            asset_name: stowr-linux-x86_64
+            artifact_name: stowr-cli
+            asset_name: stowr-cli-linux-x86_64
             archive_ext: tar.gz
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            artifact_name: stowr.exe
-            asset_name: stowr-windows-x86_64
+            artifact_name: stowr-cli.exe
+            asset_name: stowr-cli-windows-x86_64
             archive_ext: zip
           - os: macos-latest
             target: x86_64-apple-darwin
-            artifact_name: stowr
-            asset_name: stowr-macos-x86_64
+            artifact_name: stowr-cli
+            asset_name: stowr-cli-macos-x86_64
             archive_ext: tar.gz
           - os: macos-latest
             target: aarch64-apple-darwin
-            artifact_name: stowr
-            asset_name: stowr-macos-aarch64
+            artifact_name: stowr-cli
+            asset_name: stowr-cli-macos-aarch64
             archive_ext: tar.gz
 
     steps:
@@ -129,20 +129,20 @@ jobs:
         draft: false
         prerelease: false
         body: |
-          ## STOWR ${{ github.ref_name }}
+          ## stowr-cli ${{ github.ref_name }}
           
           预编译二进制文件下载：
           
-          - **Linux (x86_64)**: `stowr-linux-x86_64.tar.gz`
-          - **Windows (x86_64)**: `stowr-windows-x86_64.zip`
-          - **macOS (Intel)**: `stowr-macos-x86_64.tar.gz`
-          - **macOS (Apple Silicon)**: `stowr-macos-aarch64.tar.gz`
+          - **Linux (x86_64)**: `stowr-cli-linux-x86_64.tar.gz`
+          - **Windows (x86_64)**: `stowr-cli-windows-x86_64.zip`
+          - **macOS (Intel)**: `stowr-cli-macos-x86_64.tar.gz`
+          - **macOS (Apple Silicon)**: `stowr-cli-macos-aarch64.tar.gz`
           
           ### 安装说明
           
           1. 下载对应平台的压缩包
-          2. 解压并将 `stowr` 或 `stowr.exe` 放到 PATH 目录中
-          3. 运行 `stowr --help` 查看使用帮助
+          2. 解压并将 `stowr-cli` 或 `stowr-cli.exe` 放到 PATH 目录中
+          3. 运行 `stowr-cli --help` 查看使用帮助
           
           ### 主要功能
           
