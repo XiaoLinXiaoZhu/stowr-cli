@@ -14,7 +14,7 @@ description = "A simple CLI tool for file management, including compressing, ext
 
 [dependencies]
 clap = { version = "4.4", features = ["derive"] }
-stowr-core = "0.2.4"
+stowr-core = { path = "../stowr-core" }
 anyhow = "1.0"
 
 [dev-dependencies]

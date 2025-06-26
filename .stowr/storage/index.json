@@ -1,0 +1,20 @@
+{
+  "test.txt": {
+    "id": "79e7af80-fd04-4094-a3ab-fdf419980862",
+    "original_path": "test.txt",
+    "stored_path": ".stowr\\storage\\79e7af80-fd04-4094-a3ab-fdf419980862.gz",
+    "file_size": 28,
+    "compressed_size": 44,
+    "created_at": "2025-06-26T04:09:18.663560200+00:00",
+    "compression_algorithm": "Gzip"
+  },
+  "test_copy.txt": {
+    "id": "214578c2-8140-4651-a989-d50ac6e520c8",
+    "original_path": "test_copy.txt",
+    "stored_path": ".stowr\\storage\\214578c2-8140-4651-a989-d50ac6e520c8.gz",
+    "file_size": 28,
+    "compressed_size": 44,
+    "created_at": "2025-06-26T04:10:31.659117200+00:00",
+    "compression_algorithm": "Gzip"
+  }
+}

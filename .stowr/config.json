@@ -3,5 +3,9 @@
   "index_mode": "Auto",
   "multithread": 1,
   "compression_algorithm": "Gzip",
-  "compression_level": 6
+  "compression_level": 6,
+  "enable_deduplication": true,
+  "enable_delta_compression": true,
+  "similarity_threshold": 0.8,
+  "delta_algorithm": "Simple"
 }
