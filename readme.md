@@ -49,7 +49,28 @@ stowr config --list
 - `storage.path`：指定存储文件的路径。
 - `index.mode`：指定索引模式，可选择为 `auto`、`json` 或 `sqlite` 作为索引库的实现方式。auto模式下会根据存储的文件数量切换索引方式。当存储文件数目小于 1000 时，使用 `json` 模式；当存储文件数目大于等于 1000 时，使用 `sqlite` 模式。
 - `multithread`：指定多线程数量（默认值1），用于控制压缩和解压操作时启用的线程数量。当设置大于1时，批量操作将使用多线程并行处理以提升性能。
-- `compression.level`：指定压缩级别（默认值6），范围是0-9。0表示无压缩（最快），9表示最大压缩（最慢）。较高的压缩级别可以减少存储空间，但会增加CPU使用时间。
+- `compression.algorithm`：指定压缩算法（默认值gzip），可选择：
+  - `gzip`：通用性好，压缩率中等，速度中等（默认选择）
+  - `zstd`：现代高效算法，压缩率高，速度快，推荐用于新项目
+  - `lz4`：压缩速度极快，压缩率较低，适合实时处理场景
+- `compression.level`：指定压缩级别，不同算法支持不同范围：
+  - gzip: 0-9（默认6）
+  - zstd: 1-22（默认3）
+  - lz4: 无级别配置（专注于速度）
+
+**压缩算法配置示例：**
+```bash
+# 使用zstd高压缩率
+stowr config compression.algorithm zstd
+stowr config compression.level 15
+
+# 使用lz4高速度（无需设置level）
+stowr config compression.algorithm lz4
+
+# 使用gzip兼容性
+stowr config compression.algorithm gzip
+stowr config compression.level 9
+```
 
 #### 2. **store** — 存储文件
 

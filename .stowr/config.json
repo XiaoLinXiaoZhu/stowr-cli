@@ -1,6 +1,7 @@
 {
   "storage_path": ".stowr\\storage",
   "index_mode": "Auto",
-  "multithread": 1,
-  "compression_level": 6
+  "multithread": 2,
+  "compression_algorithm": "Zstd",
+  "compression_level": 3
 }
